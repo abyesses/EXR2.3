@@ -110,7 +110,7 @@ void * operacion_gen(void * p){
 int main(int argc, const char * argv[]) {
     pthread_t * hilos = (pthread_t *)malloc(sizeof(pthread_t)*N);
     cliente params;
-    
+    pthread_mutex_init(&mutex, NULL);
     sem_init(&cajeros_gen, 0, 5);
     sem_init(&cajeros_emp, 0, 3);
     int op_gen = 0;
