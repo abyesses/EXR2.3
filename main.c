@@ -49,7 +49,7 @@ void * operacion_emp(void * p){
     t1 = (rand() % (340+1-90))+90;
     //printf("Esperando %d segundos\n",t1);
     sleep(t1);
-    if (num_op_emp < = 5)
+    if (num_op_emp <= 5)
     {
         sem_wait(&cajeros_emp);
         sem_getvalue(&cajeros_emp, &valor_sem);
@@ -59,7 +59,7 @@ void * operacion_emp(void * p){
         sleep(t2);
         pthread_mutex_lock(&mutex);
         printf("Aumentando num_op_gen de %d a",num_op_emp);
-        num_op_emp = temp++;
+        num_op_emp++;
         printf(" %d\n",num_op_emp);
         pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_emp);
