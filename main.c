@@ -42,6 +42,7 @@ typedef struct{
 }cliente;
 void * operacion_emp(void * p){
     int t,t2;
+    printf("Esperando %d segundos\n",t2);
     t2 = (rand() % (340+1-90))+90;
     sleep(t2);
     if (num_op_emp <= 5)
@@ -49,6 +50,7 @@ void * operacion_emp(void * p){
         sem_wait(&cajeros_emp);
         printf("Cajero %d: Atendiendo al cliente %d,con operación %d\n",sem_getvalue(&cajeros_emp,NULL),((cliente*)p)->id,((cliente *)p)->tipo_op);
         t=(rand() % (5+1-3))+3;
+        printf("Generando operación por %d segundos\n",t);
         sleep(t);
         sem_post(&cajeros_emp);
     }
@@ -62,12 +64,14 @@ void * operacion_emp(void * p){
 void * operacion_gen(void * p){
     int t,t2;
     t2 = (rand() % (220+1-50))+50;
+    printf("Esperando %d segundos\n",t2);
     sleep(t2);
     if (num_op_gen <= 5)
     {
         sem_wait(&cajeros_gen);
         printf("Cajero %d: Atendiendo al cliente %d,con operación %d\n",sem_getvalue(&cajeros_gen,NULL),((cliente*)p)->id,((cliente *)p)->tipo_op);
         t=(rand() % (5+1-3))+3;
+        printf("Generando operación por %d segundos\n",t);
         sleep(t);
         sem_post(&cajeros_gen);
     }
