@@ -74,6 +74,7 @@ void * operacion_emp(void * p){
     pthread_exit(NULL);
 }
 void * operacion_gen(void * p){
+    
     pthread_mutex_lock(&mutex);
     int temp = num_op_gen;
     pthread_mutex_unlock(&mutex);
@@ -91,7 +92,7 @@ void * operacion_gen(void * p){
         //printf("Generando operación por %d segundos\n",t4);
         sleep(t4);
         pthread_mutex_lock(&mutex);
-        num_op_gen = temp++;
+        num_op_gen++;
         pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_gen);
     }
@@ -109,29 +110,29 @@ void * operacion_gen(void * p){
 }
 int main(int argc, const char * argv[]) {
     pthread_t * hilos = (pthread_t *)malloc(sizeof(pthread_t)*N);
-    cliente params;
+    cliente * params;
     pthread_mutex_init(&mutex, NULL);
     sem_init(&cajeros_gen, 0, 5);
     sem_init(&cajeros_emp, 0, 3);
     int op_gen = 0;
     int op_emp = 0;
     for (int i = 0; i < N; ++i) {
+        params = malloc(sizeof(cliente));
+        (*params).id = i;
+        (*params).tipo_op = (rand() % (2+1-1))+1;
         
-        params.id = i;
-        params.tipo_op = (rand() % (2+1-1))+1;
-        
-        switch (params.tipo_op) {
+        switch ((*params).tipo_op) {
             case 1:
-                if (op_gen <= 100) {
-                    printf("+++ Creando el hilo con id %d y tipo de operación general (%d)...\n",params.id, params.tipo_op);
-                    pthread_create((hilos+i),NULL, operacion_gen,  &params);
+                if (op_gen < 100) {
+                    printf("+++ Creando el hilo con id %d y tipo de operación general (%d)...\n",(*params).id, (*params).tipo_op);
+                    pthread_create((hilos+i),NULL, operacion_gen,  (void *) params);
                     op_gen++;
                 }
                 break;
             case 2:
-                if (op_emp <= 50) {
-                printf("+++ Creando el hilo con id %d y tipo de operación empresarial (%d)...\n",params.id, params.tipo_op);
-                pthread_create((hilos+i),NULL, operacion_emp,  &params);
+                if (op_emp < 50) {
+                printf("+++ Creando el hilo con id %d y tipo de operación empresarial (%d)...\n",(*params).id, (*params).tipo_op);
+                pthread_create((hilos+i),NULL, operacion_emp,  (void *)params);
                 op_emp++;
                 }
                 break;
