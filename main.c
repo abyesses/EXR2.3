@@ -55,7 +55,7 @@ void * operacion_emp(void * p){
         sem_getvalue(&cajeros_emp, &valor_sem);
         printf("Cajero %d : Atendiendo al cliente %d,con operación %d\n",valor_sem,((cliente*)p)->id,((cliente *)p)->tipo_op);
         t2=(rand() % (5+1-3))+3;
-        printf("Generando operación por %d segundos\n",t2);
+        //printf("Generando operación por %d segundos\n",t2);
         sleep(t2);
         pthread_mutex_lock(&mutex);
         num_op_emp = temp++;
@@ -68,6 +68,7 @@ void * operacion_emp(void * p){
         printf("Cajero %d descansando...\n",a);
         sleep(3);
         pthread_mutex_lock(&mutex);
+        printf("Hola!!!!!!!");
         num_op_emp = 0;
         pthread_mutex_lock(&mutex);
     }
@@ -92,6 +93,7 @@ void * operacion_gen(void * p){
         //printf("Generando operación por %d segundos\n",t4);
         sleep(t4);
         pthread_mutex_lock(&mutex);
+        printf("Hola!!!!!!!");
         num_op_gen++;
         pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_gen);
