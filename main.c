@@ -42,14 +42,14 @@ typedef struct{
     int tipo_op;
 }cliente;
 void * operacion_emp(void * p){
-    pthread_mutex_lock(&mutex);
+    /*pthread_mutex_lock(&mutex);
     int temp = num_op_emp;
-    pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&mutex);*/
     int t1,t2,valor_sem;
     t1 = (rand() % (340+1-90))+90;
     //printf("Esperando %d segundos\n",t1);
     sleep(t1);
-    if (temp <= 5)
+    if (num_op_emp < = 5)
     {
         sem_wait(&cajeros_emp);
         sem_getvalue(&cajeros_emp, &valor_sem);
@@ -78,15 +78,15 @@ void * operacion_emp(void * p){
 }
 void * operacion_gen(void * p){
     
-    pthread_mutex_lock(&mutex);
+   /* pthread_mutex_lock(&mutex);
     int temp = num_op_gen;
-    pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&mutex);*/
     int t3,t4,valor_sem;
     t3 = (rand() % (220+1-50))+50;
     
     //printf("Esperando %d segundos\n",t3);
     sleep(t3);
-    if (temp <= 5)
+    if (num_op_gen <= 5)
     {
         sem_wait(&cajeros_gen);
         sem_getvalue(&cajeros_gen, &valor_sem);
