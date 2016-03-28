@@ -58,9 +58,9 @@ void * operacion_emp(void * p){
         //printf("Generando operación por %d segundos\n",t2);
         sleep(t2);
         pthread_mutex_lock(&mutex);
-        printf("Aumentando num_op_gen de %d a",num_op_emp);
+        //printf("Aumentando num_op_gen de %d a",num_op_emp);
         num_op_emp++;
-        printf(" %d\n",num_op_emp);
+        //printf(" %d\n",num_op_emp);
         pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_emp);
     }
@@ -70,7 +70,7 @@ void * operacion_emp(void * p){
         printf("Cajero %d descansando...\n",a);
         sleep(3);
         pthread_mutex_lock(&mutex);
-        printf("Reiniciando op_emp\n--------");
+        //printf("Reiniciando op_emp\n--------");
         num_op_emp = 0;
         pthread_mutex_unlock(&mutex);
     }
@@ -95,19 +95,19 @@ void * operacion_gen(void * p){
         //printf("Generando operación por %d segundos\n",t4);
         sleep(t4);
         pthread_mutex_lock(&mutex);
-        printf("Aumentando num_op_gen de %d a",num_op_gen);
+        //printf("Aumentando num_op_gen de %d a",num_op_gen);
         num_op_gen++;
-        printf(" %d\n",num_op_gen);
+        //printf(" %d\n",num_op_gen);
         pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_gen);
     }
     else{
         int a;
         sem_getvalue(&cajeros_gen, &a);
-        printf("Cajero %d descansando...\n",a);
+        //printf("Cajero %d descansando...\n",a);
         sleep(3);
         pthread_mutex_lock(&mutex);
-        printf("Reiniciando op_gen\n--------");
+        //printf("Reiniciando op_gen\n--------");
         num_op_gen = 0;
         pthread_mutex_unlock(&mutex);
     }
