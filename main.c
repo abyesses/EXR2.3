@@ -70,7 +70,7 @@ void * operacion_emp(void * p){
         pthread_mutex_lock(&mutex);
         printf("Hola!!!!!!!");
         num_op_emp = 0;
-        pthread_mutex_lock(&mutex);
+        pthread_mutex_unlock(&mutex);
     }
     pthread_exit(NULL);
 }
@@ -105,9 +105,8 @@ void * operacion_gen(void * p){
         sleep(3);
         pthread_mutex_lock(&mutex);
         num_op_gen = 0;
-        pthread_mutex_lock(&mutex);
+        pthread_mutex_unlock(&mutex);
     }
-    pthread_mutex_unlock(&mutex);
     pthread_exit(NULL);
 }
 int main(int argc, const char * argv[]) {
