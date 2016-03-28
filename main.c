@@ -34,6 +34,7 @@ sem_t cajeros_gen;
 sem_t cajeros_emp;
 void * operacion_emp(void*);
 void * operacion_gen(void*);
+pthread_mutex_t mutex;
 int num_op_gen = 0;
 int num_op_emp = 0;
 typedef struct{
@@ -41,46 +42,63 @@ typedef struct{
     int tipo_op;
 }cliente;
 void * operacion_emp(void * p){
+    pthread_mutex_lock(&mutex);
+    int temp = num_op_emp;
+    pthread_mutex_unlock(&mutex);
     int t1,t2;
-    
     t1 = (rand() % (340+1-90))+90;
     printf("Esperando %d segundos\n",t1);
     sleep(t1);
-    if (num_op_emp <= 5)
+    if (temp <= 5)
     {
         sem_wait(&cajeros_emp);
         printf("Cajero %d: Atendiendo al cliente %d,con operación %d\n",sem_getvalue(&cajeros_emp,NULL),((cliente*)p)->id,((cliente *)p)->tipo_op);
         t2=(rand() % (5+1-3))+3;
         printf("Generando operación por %d segundos\n",t2);
         sleep(t2);
+        pthread_mutex_lock(&mutex);
+        num_op_emp = temp++;
+        pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_emp);
     }
     else{
         printf("Cajero X descansando...\n");
         sleep(3);
+        pthread_mutex_lock(&mutex);
         num_op_emp = 0;
+        pthread_mutex_lock(&mutex);
     }
     pthread_exit(NULL);
 }
 void * operacion_gen(void * p){
+    pthread_mutex_lock(&mutex);
+    int temp = num_op_gen;
+    pthread_mutex_unlock(&mutex);
     int t3,t4;
     t3 = (rand() % (220+1-50))+50;
+    
     printf("Esperando %d segundos\n",t3);
     sleep(t3);
-    if (num_op_gen <= 5)
+    if (temp <= 5)
     {
         sem_wait(&cajeros_gen);
         printf("Cajero %d: Atendiendo al cliente %d,con operación %d\n",sem_getvalue(&cajeros_gen,NULL),((cliente*)p)->id,((cliente *)p)->tipo_op);
         t4=(rand() % (5+1-3))+3;
         printf("Generando operación por %d segundos\n",t4);
         sleep(t4);
+        pthread_mutex_lock(&mutex);
+        num_op_gen = temp++;
+        pthread_mutex_unlock(&mutex);
         sem_post(&cajeros_gen);
     }
     else{
         printf("Cajero X descansando...\n");
         sleep(3);
+        pthread_mutex_lock(&mutex);
         num_op_gen = 0;
+        pthread_mutex_lock(&mutex);
     }
+    pthread_mutex_unlock(&mutex);
     pthread_exit(NULL);
 }
 int main(int argc, const char * argv[]) {
