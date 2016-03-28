@@ -51,7 +51,7 @@ void * operacion_emp(void * p){
         sem_wait(&cajeros_emp);
         printf("Cajero %d: Atendiendo al cliente %d,con operación %d\n",sem_getvalue(&cajeros_emp,NULL),((cliente*)p)->id,((cliente *)p)->tipo_op);
         t2=(rand() % (5+1-3))+3;
-        printf("Generando operación por %d segundos\n",t);
+        printf("Generando operación por %d segundos\n",t2);
         sleep(t2);
         sem_post(&cajeros_emp);
     }
@@ -72,7 +72,7 @@ void * operacion_gen(void * p){
         sem_wait(&cajeros_gen);
         printf("Cajero %d: Atendiendo al cliente %d,con operación %d\n",sem_getvalue(&cajeros_gen,NULL),((cliente*)p)->id,((cliente *)p)->tipo_op);
         t4=(rand() % (5+1-3))+3;
-        printf("Generando operación por %d segundos\n",t);
+        printf("Generando operación por %d segundos\n",t4);
         sleep(t4);
         sem_post(&cajeros_gen);
     }
